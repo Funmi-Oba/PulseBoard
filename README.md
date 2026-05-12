@@ -4,6 +4,9 @@ A high-performance real-time analytics dashboard built with Vue 3 + TypeScript, 
 
 ---
 
+## Live Link
+
+
 ## 🚀 Setup Instructions
 
 ### Prerequisites
@@ -15,7 +18,7 @@ A high-performance real-time analytics dashboard built with Vue 3 + TypeScript, 
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone <https://github.com/Funmi-Oba/PulseBoard>
 cd realtime-dashboard
 
 # Install dependencies

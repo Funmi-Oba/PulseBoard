@@ -24,6 +24,7 @@ export function generateMetricPoint(previousValue: number, min: number, max: num
 
 export function generateActivityEvent(): ActivityEvent {
   const template = EVENT_MESSAGES[Math.floor(Math.random() * EVENT_MESSAGES.length)]
+  if (!template) throw new Error('No event template found')
   return {
     id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     timestamp: Date.now(),
