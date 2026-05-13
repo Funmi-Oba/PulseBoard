@@ -4,7 +4,10 @@ A high-performance real-time analytics dashboard built with Vue 3 + TypeScript, 
 
 ---
 
-## Live Link
+## [Live Link](https://pulse-board-mu-virid.vercel.app/)
+
+
+## [Repo Link](https://github.com/Funmi-Oba/PulseBoard)
 
 
 ## 🚀 Setup Instructions
