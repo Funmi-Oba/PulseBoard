@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-bg-card border p-5 border-border rounded-xl  shadow-sm transition-all duration-300 hover:shadow-md cursor-default">
-    
+  <div class="bg-bg-card border border-border rounded-xl p-5 shadow-sm transition-all duration-300 hover:shadow-md cursor-default">
+
     <!-- Header -->
     <div class="flex justify-between items-center mb-3">
       <span class="text-xs font-semibold uppercase tracking-widest text-text-secondary">
@@ -11,14 +11,22 @@
       </span>
     </div>
 
-    <!-- Value -->
+    <!-- Animated Value -->
     <div class="flex items-baseline gap-1 mb-2">
-      <span class="text-3xl font-bold leading-none text-text-primary">
-        {{ formattedValue }}
+      <span class="text-3xl font-bold leading-none text-text-primary transition-all duration-300">
+        {{ displayValue }}
       </span>
       <span class="text-base font-normal text-text-muted">
         {{ metric.unit }}
       </span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full h-1.5 rounded-full bg-border mb-2 overflow-hidden">
+      <div
+        class="h-full rounded-full transition-all duration-700 ease-out"
+        :style="{ width: `${Math.min(metric.value, 100)}%`, backgroundColor: barColor }"
+      ></div>
     </div>
 
     <!-- Change -->
@@ -30,15 +38,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import type { DashboardMetric } from '@/types'
 
 const props = defineProps<{ metric: DashboardMetric }>()
 
-const formattedValue = computed(() =>
-  props.metric.value % 1 === 0
-    ? props.metric.value.toString()
-    : props.metric.value.toFixed(1)
+const displayValue = ref(props.metric.value)
+
+// Animate counter on value change
+watch(
+  () => props.metric.value,
+  (newVal, oldVal) => {
+    const steps = 20
+    const diff = newVal - oldVal
+    const stepValue = diff / steps
+    let current = oldVal
+    let step = 0
+
+    const interval = setInterval(() => {
+      step++
+      current += stepValue
+      displayValue.value = parseFloat(current.toFixed(1))
+      if (step >= steps) {
+        clearInterval(interval)
+        displayValue.value = parseFloat(newVal.toFixed(1))
+      }
+    }, 30)
+  }
 )
 
 const trendIcon = computed(() =>
@@ -52,6 +78,16 @@ const trendColor = computed(() =>
       ? 'text-success'
       : 'text-text-muted'
 )
+
+const barColor = computed(() => {
+  const colors: Record<string, string> = {
+    cpu: '#ad1f98',
+    memory: '#e052cb',
+    requests: '#767b51',
+    errors: '#b9467c',
+  }
+  return colors[props.metric.id] ?? '#ad1f98'
+})
 
 const changeText = computed(() => {
   const diff = props.metric.value - props.metric.previousValue

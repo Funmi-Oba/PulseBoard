@@ -1,8 +1,9 @@
 <template>
   <div
-    
     class="min-h-screen bg-bg-primary text-text-primary transition-all duration-300"
   >
+  <!-- Loading Screen -->
+<LoadingScreen :show="isLoading" />
     <!-- Top Navbar -->
     <header
       class="bg-bg-card border-b border-border px-6 h-16 flex items-center justify-between sticky top-0 z-50"
@@ -44,6 +45,11 @@
           @toggleStreaming="store.toggleStreaming()"
           @setRange="store.setTimeRange($event)"
         />
+        <DatasetToggle
+    :allSeries="store.series"
+    :hiddenSeries="store.hiddenSeries"
+    @toggle="store.toggleSeries($event)"
+  />
       </div>
 
       <!-- Metric Cards -->
@@ -110,13 +116,22 @@ import BarChart from '@/components/charts/BarChart.vue'
 import AreaChart from '@/components/charts/AreaChart.vue'
 import ActivityFeed from '@/components/ui/ActivityFeed.vue'
 import DashboardControls from '@/components/ui/DashboardControls.vue'
-import { onUnmounted } from 'vue'
+import DatasetToggle from '@/components/ui/DatasetToggle.vue'
+import LoadingScreen from '@/components/ui/LoadingScreen.vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 const store = useDashboardStore()
 
 onUnmounted(() => store.cleanup())
+const isLoading = ref(true)
+
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 2000)
+})
 
 function seriesColor(id: string): string {
   const colors: Record<string, string> = {
@@ -127,4 +142,6 @@ function seriesColor(id: string): string {
   }
   return colors[id] ?? '#ad1f98'
 }
+
+
 </script>

@@ -20,6 +20,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const series = ref<MetricSeries[]>(generateInitialSeries())
   const activityFeed = ref<ActivityEvent[]>([])
   const connectionStatus = ref<'connected' | 'disconnected' | 'reconnecting'>('connected')
+  const hiddenSeries = ref<string[]>([])
 
   let streamInterval: ReturnType<typeof setInterval> | null = null
   let activityInterval: ReturnType<typeof setInterval> | null = null
@@ -34,10 +35,12 @@ export const useDashboardStore = defineStore('dashboard', () => {
       live: 0,
     }
     const cutoff = cutoffs[timeRange.value]
-    return series.value.map((s) => ({
-      ...s,
-      data: s.data.filter((p) => p.timestamp >= cutoff),
-    }))
+    return series.value
+      .filter((s) => !hiddenSeries.value.includes(s.id))
+      .map((s) => ({
+        ...s,
+        data: s.data.filter((p) => p.timestamp >= cutoff),
+      }))
   })
 
   // --- Actions ---
@@ -71,7 +74,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       const event = generateActivityEvent()
       activityFeed.value = [event, ...activityFeed.value].slice(0, MAX_FEED_ITEMS)
     }, 3000)
- 
+
     connectionStatus.value = 'connected'
     isStreaming.value = true
   }
@@ -86,7 +89,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       activityInterval = null
     }
     isStreaming.value = false
-    connectionStatus.value = 'connected' // keep connected, paused is intentional
+    connectionStatus.value = 'connected'
   }
 
   function toggleStreaming() {
@@ -95,6 +98,14 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   function setTimeRange(range: TimeRange) {
     timeRange.value = range
+  }
+
+  function toggleSeries(id: string) {
+    if (hiddenSeries.value.includes(id)) {
+      hiddenSeries.value = hiddenSeries.value.filter((s) => s !== id)
+    } else {
+      hiddenSeries.value = [...hiddenSeries.value, id]
+    }
   }
 
   function cleanup() {
@@ -111,11 +122,13 @@ export const useDashboardStore = defineStore('dashboard', () => {
     series,
     activityFeed,
     connectionStatus,
+    hiddenSeries,
     filteredSeries,
     startStreaming,
     stopStreaming,
     toggleStreaming,
     setTimeRange,
+    toggleSeries,
     cleanup,
   }
 })
