@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="{ dark: isDark }"
+    
     class="min-h-screen bg-bg-primary text-text-primary transition-all duration-300"
   >
     <!-- Top Navbar -->
@@ -28,7 +28,7 @@
           class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium border border-border bg-bg-card text-text-primary cursor-pointer transition-all duration-300 hover:border-accent hover:text-accent"
           @click="toggleDark()"
         >
-          {{ isDark ? '☀️ Light' : '🌙 Dark' }}
+          {{ isDark ? '☀️' : '🌙' }}
         </button>
       </div>
     </header>
