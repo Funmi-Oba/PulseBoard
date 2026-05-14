@@ -121,15 +121,15 @@
     <!-- Toast Notifications -->
     <ToastNotification :feed="store.activityFeed" />
     <!-- Command Palette -->
-<CommandPalette
-  :show="showCommandPalette"
-  :isStreaming="store.isStreaming"
-  :isDark="isDark"
-  @close="showCommandPalette = false"
-  @toggleStreaming="store.toggleStreaming()"
-  @setRange="store.setTimeRange($event)"
-  @toggleDark="toggleDark()"
-/>
+    <CommandPalette
+      :show="showCommandPalette"
+      :isStreaming="store.isStreaming"
+      :isDark="isDark"
+      @close="showCommandPalette = false"
+      @toggleStreaming="store.toggleStreaming()"
+    @setRange="store.setTimeRange($event as any)"
+      @toggleDark="toggleDark()"
+    />
     <!-- Keyboard Shortcuts -->
     <KeyboardShortcuts
       :show="showShortcuts"
