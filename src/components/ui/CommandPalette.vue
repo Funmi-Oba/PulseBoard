@@ -3,7 +3,7 @@
   <Transition name="fade">
     <div
       v-if="show"
-      class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
+      class="fixed inset-0 z-60 bg-black/50 backdrop-blur-sm"
       @click="$emit('close')"
     ></div>
   </Transition>
@@ -12,7 +12,7 @@
   <Transition name="slide">
     <div
       v-if="show"
-      class="fixed top-32 left-1/2 -translate-x-1/2 z-[70] w-full max-w-lg bg-bg-card border border-border rounded-2xl shadow-2xl overflow-hidden"
+      class="fixed top-32 left-1/2 -translate-x-1/2 z-70 w-full max-w-lg bg-bg-card border border-border rounded-2xl shadow-2xl overflow-hidden"
     >
       <!-- Search Input -->
       <div class="flex items-center gap-3 px-4 py-3 border-b border-border">
