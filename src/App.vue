@@ -127,7 +127,7 @@
       :isDark="isDark"
       @close="showCommandPalette = false"
       @toggleStreaming="store.toggleStreaming()"
-    @setRange="store.setTimeRange($event as any)"
+      @setRange="store.setTimeRange($event as any)"
       @toggleDark="toggleDark()"
     />
     <!-- Keyboard Shortcuts -->
