@@ -8,6 +8,9 @@
       <div class="flex items-center gap-2">
         <span>{{ statusIcon }}</span>
         <span>{{ statusMessage }}</span>
+        <span v-if="status === 'reconnecting'" class="text-xs opacity-70">
+          (attempt {{ reconnectAttempts }} of 5)
+        </span>
       </div>
       <button
         v-if="status === 'disconnected'"
@@ -16,6 +19,7 @@
       >
         Reconnect
       </button>
+      <div v-if="status === 'reconnecting'" class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
     </div>
   </Transition>
 </template>
@@ -25,6 +29,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   status: 'connected' | 'disconnected' | 'reconnecting'
+  reconnectAttempts: number
 }>()
 
 defineEmits<{ reconnect: [] }>()
